@@ -1,0 +1,57 @@
+import React, { useRef } from 'react';
+import { Select, Button } from 'antd';
+
+const { Option } = Select;
+
+const ClearMultipleSelects = () => {
+  const selectRef1 = useRef(null);
+  const selectRef2 = useRef(null);
+  const selectRef3 = useRef(null);
+
+  const clearAllSelects = () => {
+    selectRef1.current?.clear();
+    selectRef2.current?.clear();
+    selectRef3.current?.clear();
+  };
+
+  return (
+    <div>
+      <Select
+        ref={selectRef1}
+        allowClear
+        style={{ width: 200, marginBottom: 16 }}
+        placeholder="Select an item"
+      >
+        <Option value="item1">Item 1</Option>
+        <Option value="item2">Item 2</Option>
+        <Option value="item3">Item 3</Option>
+      </Select>
+      <br />
+      <Select
+        ref={selectRef2}
+        allowClear
+        style={{ width: 200, marginBottom: 16 }}
+        placeholder="Select an item"
+      >
+        <Option value="item1">Item 1</Option>
+        <Option value="item2">Item 2</Option>
+        <Option value="item3">Item 3</Option>
+      </Select>
+      <br />
+      <Select
+        ref={selectRef3}
+        allowClear
+        style={{ width: 200, marginBottom: 16 }}
+        placeholder="Select an item"
+      >
+        <Option value="item1">Item 1</Option>
+        <Option value="item2">Item 2</Option>
+        <Option value="item3">Item 3</Option>
+      </Select>
+      <br />
+      <Button onClick={clearAllSelects}>Clear All Selects</Button>
+    </div>
+  );
+};
+
+export default ClearMultipleSelects;
