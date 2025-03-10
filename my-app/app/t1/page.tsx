@@ -6,9 +6,27 @@ import type { TableColumnsType } from 'antd';
 import React from 'react';
 import axios from "axios";
 import { useState, useEffect } from 'react';
-
+import type { SelectProps } from 'antd';
+import { Select, Typography } from 'antd';
 
 export default function Home() {
+  const { Title } = Typography;
+
+  const [selectedValues, setSelectedValues] = useState<string[]>([]);
+  const options: SelectProps['options'] = [];
+  for (let i = 0; i < 100000; i++) {
+    const value = `${i.toString(36)}${i}`;
+    options.push({
+      label: value,
+      value,
+      disabled: i === 10,
+    });
+  }
+
+  const handleChange = (value: string[]) => {
+    console.log(`selected ${value}`);
+    setSelectedValues(value);
+  };
   const [dataSource, setDataSource] = useState<DataType[]>([]
   );
   useEffect(() => {
@@ -35,11 +53,24 @@ export default function Home() {
       setDataSource(res.data);
     });
   };
-
+  const cleanSelect = () => {
+    console.log("cleanSelect");
+    // 清空多选框
+    setSelectedValues([]);
+  }
   return (
     <div >
-
+      <Select
+        mode="multiple"
+        style={{ width: '100%' }}
+        placeholder="Please select"
+        onChange={handleChange}
+        options={options}
+        value={selectedValues}
+      />
+      <button onClick={cleanSelect}>cleanSelect</button>
       <button onClick={updateTableData}>Click me</button>
+
       <Table<DataType>
         className={styles.customTable}
         columns={columns}
