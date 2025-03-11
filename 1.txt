@@ -118,3 +118,99 @@ export default DownloadExcel;
 5. **清理**：下载完成后，移除链接元素。
 
 通过这种方式，你可以将后台传来的 Excel 文件下载并保存到用户的计算机中。
+
+
+要在 `next.js-demo` 项目中使用 Ant Design 的 Upload 组件，可以按照以下步骤进行：
+
+### 1. 安装 Ant Design
+首先，确保你已经安装了 Ant Design 组件库：
+```bash
+npm install antd
+```
+
+### 2. 使用 Upload 组件
+在你的页面或组件中导入并使用 Upload 组件。以下是一个示例，展示了如何在 Next.js 项目中使用 Upload 组件。
+
+#### 示例代码
+```jsx
+import React from 'react';
+import { Upload, Button, message } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+
+const UploadComponent = () => {
+  const props = {
+    name: 'file',
+    action: '/api/upload', // 上传文件的接口地址
+    headers: {
+      authorization: 'authorization-text',
+    },
+    onChange(info) {
+      if (info.file.status === 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+  };
+
+  return (
+    <Upload {...props}>
+      <Button icon={<UploadOutlined />}>Click to Upload</Button>
+    </Upload>
+  );
+};
+
+export default UploadComponent;
+```
+
+### 3. 将组件添加到页面
+在你的 Next.js 页面中，导入并使用这个组件。例如，在 `app/page.tsx` 文件中：
+
+```jsx
+import React from 'react';
+import UploadComponent from '../components/UploadComponent'; // 假设你将组件放在 components 文件夹中
+
+const HomePage = () => {
+  return (
+    <div>
+      <h1>Upload your files</h1>
+      <UploadComponent />
+    </div>
+  );
+};
+
+export default HomePage;
+```
+
+### 4. 处理文件上传
+确保你在 `/api/upload` 路径上有一个 API 来处理文件上传。你可以在 `pages/api/upload.js` 文件中添加一个简单的例子：
+
+```javascript
+import formidable from 'formidable';
+import fs from 'fs';
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+export default function handler(req, res) {
+  const form = new formidable.IncomingForm();
+  form.uploadDir = "./uploads"; // 确保此目录存在
+  form.keepExtensions = true;
+
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      res.status(500).json({ error: 'Failed to upload file' });
+      return;
+    }
+    res.status(200).json({ message: 'File uploaded successfully' });
+  });
+}
+```
+
+通过这些步骤，你就可以在 Next.js 项目中使用 Ant Design 的 Upload 组件来上传文件了。
