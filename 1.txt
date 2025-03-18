@@ -216,3 +216,56 @@ export default function handler(req, res) {
 ```
 
 通过这些步骤，你就可以在 Next.js 项目中使用 Ant Design 的 Upload 组件来上传文件了。
+
+
+
+
+在 React 中，遍历和渲染标签通常使用 JavaScript 的数组方法，比如 `map`。以下是一个简单的例子，展示了如何遍历一个数组并渲染每个元素为一个列表项：
+
+```jsx
+import React from 'react';
+
+const MyComponent = () => {
+  const items = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
+
+  return (
+    <ul>
+      {items.map((item, index) => (
+        <li key={index}>{item}</li>
+      ))}
+    </ul>
+  );
+};
+
+export default MyComponent;
+```
+
+在这个示例中，我们定义了一个数组 `items`，然后使用 `map` 方法遍历该数组，并为每个元素创建一个 `<li>` 标签。每个 `<li>` 标签都需要一个唯一的 `key` 属性，这里我们使用数组的索引 `index` 作为 `key`。
+
+你还可以遍历一个对象数组，并渲染更复杂的组件。例如：
+
+```jsx
+import React from 'react';
+
+const MyComponent = () => {
+  const users = [
+    { id: 1, name: 'Alice' },
+    { id: 2, name: 'Bob' },
+    { id: 3, name: 'Charlie' }
+  ];
+
+  return (
+    <ul>
+      {users.map((user) => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
+  );
+};
+
+export default MyComponent;
+```
+
+在这个示例中，我们遍历一个对象数组 `users`，并使用每个对象的 `id` 作为 `key`，渲染每个用户的名字。
+
+希望这些示例对你有帮助！如果你有其他问题，请随时问我。
