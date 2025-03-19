@@ -85,7 +85,7 @@ export default function RootLayout({
   };
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body style={{ margin: "0px" }} className={`${geistSans.variable} ${geistMono.variable}`}>
         <Layout style={{ minHeight: '100vh' }}>
           <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
             <div className="demo-logo-vertical" />
@@ -93,7 +93,6 @@ export default function RootLayout({
           </Sider>
           <Layout>
             <Content style={{ margin: '0 16px' }}>
-              <Breadcrumb style={{ margin: '16px 0' }} items={breadcrumbItems} />
               {children}
             </Content>
 
