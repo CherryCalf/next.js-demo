@@ -269,3 +269,39 @@ export default MyComponent;
 在这个示例中，我们遍历一个对象数组 `users`，并使用每个对象的 `id` 作为 `key`，渲染每个用户的名字。
 
 希望这些示例对你有帮助！如果你有其他问题，请随时问我。
+
+
+
+
+
+import React, { useState } from 'react';
+import { Table } from 'antd';
+
+const data = [
+  // 这里填充你的数据
+];
+
+const TableWithPagination = () => {
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: data.length, // 总条数
+  });
+
+  const handleTableChange = (pagination) => {
+    setPagination(pagination);
+  };
+
+  return (
+    <Table
+      dataSource={data}
+      pagination={{
+        ...pagination,
+        showTotal: (total) => `总共 ${total} 条`,
+      }}
+      onChange={handleTableChange}
+    />
+  );
+};
+
+export default TableWithPagination;
