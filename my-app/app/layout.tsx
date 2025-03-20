@@ -1,13 +1,16 @@
-import React from 'react';
-import GLayout from '@/components/GLayout';
+import GlobalLayout from '@/components/GlobalLayout'; // 全局布局
 
-
-const Layout: React.FC = ({ children }) => {
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <GLayout>
-      {children}
-    </GLayout>
+    <html suppressHydrationWarning>
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"></meta>
+      <body>
+        <GlobalLayout>{children}</GlobalLayout>
+      </body>
+    </html>
   );
-};
-
-export default Layout;
+}
