@@ -1,4 +1,5 @@
 "use client"
+import zhCN from 'antd/es/date-picker/locale/zh_CN'; // 引入中文语言包
 import { Breadcrumb, DatePicker, message, Upload } from "antd";
 import type { UploadProps } from "antd";
 import { useEffect, useState } from "react";
@@ -142,46 +143,86 @@ export default function FilesUpload() {
     }
   }, [up2])
   return (
-    <div> {/* 面包屑 */}
-      <div style={{ marginBottom: "30px" }}>
+    <div style={{ width: "100%", height: "100vh", display: "flex", flexDirection: "column", alignItems: "center" }}>
+      {/* 面包屑 */}
+      <div style={{ marginBottom: "2vh", width: "90%" }}>
         <Breadcrumb
           items={[
             {
-              title: <span style={{ fontSize: "30px" }}>文件上传</span>
-            }
+              title: <span style={{ fontSize: "2vw" }}>文件上传</span>, // 按比例调整字体大小
+            },
           ]}
         />
       </div>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
 
-        <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", marginBottom: "20px", marginTop: "200px" }}>
-          <span>请输入您当前要处理的月份:</span>
-          <DatePicker suffixIcon={smileIcon} onChange={onChange} picker="month" />
-        </div>
-
-        <div style={{ display: "flex", width: "1200px", flexDirection: "row", justifyContent: "space-around" }}>
-          <Upload.Dragger {...propsplanned} style={{ width: "500px" }}>
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">单击或将计划工时拖到此区域进行上传</p>
-
-          </Upload.Dragger>
-
-          <Upload.Dragger {...propstimesheet} style={{ width: "500px" }}>
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">单击或将timesheet拖到此区域进行上传</p>
-
-          </Upload.Dragger>
-        </div>
-
-        <div>
-          {contextHolder}
-          <Button style={{ marginTop: "40px" }} type="primary" onClick={merge} disabled={disabled}>确认</Button>
-        </div>
+      {/* 输入框 */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          marginBottom: "5vh",
+          marginTop: "10vh",
+          width: "90%",
+        }}
+      >
+        <span style={{ fontSize: "1.5vw", marginRight: "1vw" }}>请输入您当前要处理的月份:</span>
+        <DatePicker
+          suffixIcon={smileIcon}
+          onChange={onChange}
+          picker="month"
+          locale={zhCN} // 设置为中文
+          style={{ width: "20vw", height: "5vh" }} // 按比例调整输入框大小
+        />
       </div>
-    </div >
+
+      {/* 上传区域 */}
+      <div
+        style={{
+          display: "flex",
+          width: "90%",
+          flexDirection: "row",
+          justifyContent: "space-around",
+          marginBottom: "5vh",
+        }}
+      >
+        <Upload.Dragger {...propsplanned} style={{ width: "40vw", height: "20vh" }}>
+          <p className="ant-upload-drag-icon">
+            <InboxOutlined style={{ fontSize: "3vw" }} /> {/* 按比例调整图标大小 */}
+          </p>
+          <p className="ant-upload-text" style={{ fontSize: "1.2vw" }}>
+            单击或将计划工时拖到此区域进行上传
+          </p>
+        </Upload.Dragger>
+
+        <Upload.Dragger {...propstimesheet} style={{ width: "40vw", height: "20vh" }}>
+          <p className="ant-upload-drag-icon">
+            <InboxOutlined style={{ fontSize: "3vw" }} /> {/* 按比例调整图标大小 */}
+          </p>
+          <p className="ant-upload-text" style={{ fontSize: "1.2vw" }}>
+            单击或将 timesheet 拖到此区域进行上传
+          </p>
+        </Upload.Dragger>
+      </div>
+
+      {/* 确认按钮 */}
+      <div>
+        {contextHolder}
+        <Button
+          style={{
+            marginTop: "5vh",
+            width: "15vw",
+            height: "6vh",
+            fontSize: "1.5vw", // 按比例调整按钮字体大小
+          }}
+          type="primary"
+          onClick={merge}
+          disabled={disabled}
+        >
+          确认
+        </Button>
+      </div>
+    </div>
   );
 }

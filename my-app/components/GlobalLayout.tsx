@@ -122,7 +122,7 @@ export default function GlobalLayout({ children }: GlobalLayoutProps) {
   return skipGlobalLayout ? <>{children}</> : (
     <html lang="en">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"></meta>
-      <body className={`${geistSans.variable} ${geistMono.variable}`} style={{ overflow: "hidden" }}>
+      <body>
         <Layout style={{ minHeight: '100vh' }}>
           <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
             <Menu theme="dark" defaultSelectedKeys={['1']} selectedKeys={selectedKeys} mode="inline" items={items} onClick={handleMenuClick} />

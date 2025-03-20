@@ -72,56 +72,64 @@ export default function filter() {
 
   const columns: TableColumnsType<DataType> = [
     {
-      title: 'dalianTeam',
-      dataIndex: 'dalianTeam',
-      key: '1',
-      width: "100"
+      title: "dalianTeam",
+      dataIndex: "dalianTeam",
+      key: "1",
+      width: 150,
+      minWidth: 100, // 设置最小宽度
     },
     {
       title: 'tokyoTeam',
       dataIndex: 'tokyoTeam',
       key: '2',
-      width: "100"
+      width: "100",
+      minWidth: 100, // 设置最小宽度
 
     },
     {
       title: 'name',
       dataIndex: 'name',
       key: '3',
-      width: "100"
+      width: "100",
+      minWidth: 100, // 设置最小宽度
 
     },
     {
       title: 'project',
       dataIndex: 'project',
       key: '4',
-      width: "100"
+      width: "100",
+      minWidth: 100, // 设置最小宽度
 
     },
     {
       title: 'workingTime',
       dataIndex: 'workingTime',
       key: '5',
-      width: "100"
+      width: "100",
+      minWidth: 100, // 设置最小宽度
 
     },
     {
       title: 'task',
       dataIndex: 'task',
       key: '6',
-      width: "100"
+      width: "100",
+      minWidth: 100, // 设置最小宽度
 
     }, {
       title: 'memo',
       dataIndex: 'memo',
       key: '7',
-      width: "100"
+      width: "100",
+      minWidth: 100, // 设置最小宽度
 
     }, {
       title: 'entity',
       dataIndex: 'entity',
       key: '8',
-      width: "100"
+      width: "100",
+      minWidth: 100, // 设置最小宽度
 
     }
   ];
@@ -146,10 +154,38 @@ export default function filter() {
     setTimeout(() => {
       // 请求table默认合格数据
       getPass()
+      // 模拟请求数据
+      setTimeout(() => {
+        setDataSource(mockPassData);
+      }, 500); // 模拟网络延迟
       // 请求table默认不合格数据
-      getUnPass()
+      // getUnPass()
+      // 模拟请求不合格数据
+      setTimeout(() => {
+        setDataSource2(mockUnPassData);
+      }, 500); // 模拟网络延迟
       // 请求table全部数据
-      getAll()
+      // getAll()
+      // 模拟请求全部数据
+      setTimeout(() => {
+        setDataSource3(mockAllData);
+      }, 500); // 模拟网络延迟
+      setTimeout(() => {
+        const s1 = mockDalianTeamData.map((e) => ({
+          label: e.dalianTeam,
+          value: e.dalianTeam,
+          key: e.dalianTeam,
+        }));
+        setGetDalianTeamSelect(s1);
+      }, 500);
+      setTimeout(() => {
+        const s2 = mockProjectData.map((e) => ({
+          label: e.project,
+          value: e.project,
+          key: e.project,
+        }));
+        setgetProjectSelect(s2);
+      }, 500); // 模拟网络延迟
     }, 1000);
 
 
@@ -229,242 +265,271 @@ export default function filter() {
 
   return (
     <>
-    <div style={{ marginBottom: "30px" }}>
-    <Breadcrumb
-      items={[
-        {
-          title: <span style={{ fontSize: "30px" }}>数据筛选项</span>
-        }
-      ]}
-    />
-    </div>
-    <div
-      style={{
-        width: "100%",
-        height: "100vh", // 占满屏幕高度
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden", // 隐藏外部滚动条
-      }}
-    >
-
-      <Segmented
-        options={["合格数据", "不合格数据", "全部数据"]}
-        defaultValue="合格数据"
-        onChange={(value) => {
-          console.log(value);
-          if (value === "合格数据") {
-            t1.style.display = "flex"
-            t2.style.display = "none"
-            t3.style.display = "none"
-            s1.style.display = "none"
-            s2.style.display = "none"
-            b1.style.display = "none"
-            b2.style.display = "none"
-
-          } else if (value === "不合格数据") {
-            t1.style.display = "none"
-            t2.style.display = "flex"
-            t3.style.display = "none"
-            s1.style.display = "none"
-            s2.style.display = "none"
-            b1.style.display = "none"
-            b2.style.display = "none"
-          } else if (value === "全部数据") {
-            t1.style.display = "none"
-            t2.style.display = "none"
-            t3.style.display = "flex"
-            s1.style.display = "block"
-            s2.style.display = "block"
-            b1.style.display = "block"
-            b2.style.display = "block"
-          }
-        }}
+      <div style={{ marginBottom: "30px" }}>
+        <Breadcrumb
+          items={[
+            {
+              title: <span style={{ fontSize: "30px" }}>数据筛选项</span>
+            }
+          ]}
+        />
+      </div>
+      <div
         style={{
-          marginBottom: "10px",
+          width: "100%",
+          height: "100vh", // 占满屏幕高度
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden", // 隐藏外部滚动条
         }}
-      />
-      <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "flex-end", marginBottom: "10px" }} >
-        <div style={{ display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: "flex-start", width: "100%" }}>
-          <Form style={{ width: "98%", display: "flex", flexDirection: "row" }}>
-            <div style={{ display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: "flex-start", width: "200%" }}>
-              <div id='s1' style={{ display: "none", width: "100%" }}>
-                <Form.Item
-                  label="dalianTeam"
-                  name="dalianTeam"
-                  style={{ width: '90%' }}
-                >
-                  <Space style={{ width: '100%' }} direction="vertical">
-                    <Select
-                      ref={selectRef1}
-                      mode="multiple"
-                      allowClear
-                      style={{ width: '100%' }}
-                      placeholder={"请选择"}
-                      value={selectedValues1}
-                      onChange={handleChange1}
-                      options={getDalianTeamSelect}
-                    />
-                  </Space>
-                </Form.Item>
-              </div>
-              <div id='s2' style={{ display: "none", width: "100%" }}>
-                <Form.Item
-                  label="project"
-                  name="project"
-                  style={{ width: '90%', marginLeft: "30px" }}
-                >
-                  <Space style={{ width: '100%' }} direction="vertical">
-                    <Select
-                      ref={selectRef2}
-                      mode="multiple"
-                      allowClear
-                      style={{ width: '100%' }}
-                      placeholder={"请选择"}
-                      value={selectedValues2}
-                      onChange={handleChange2}
-                      options={getProjectSelect}
-                    />
-                  </Space>
-                </Form.Item>
-              </div>
-            </div>
+      >
 
-            <div style={{ display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
-              <div id='b1' style={{ display: "none" }}>
-                <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
-                  <Button type="primary" htmlType="submit" onClick={getAll}  >
-                    查询
-                  </Button>
-                </Form.Item>
+        <Segmented
+          options={["合格数据", "不合格数据", "全部数据"]}
+          defaultValue="合格数据"
+          onChange={(value) => {
+            console.log(value);
+            if (value === "合格数据") {
+              t1.style.display = "block"
+              t2.style.display = "none"
+              t3.style.display = "none"
+              s1.style.display = "none"
+              s2.style.display = "none"
+              b1.style.display = "none"
+              b2.style.display = "none"
+
+            } else if (value === "不合格数据") {
+              t1.style.display = "none"
+              t2.style.display = "block"
+              t3.style.display = "none"
+              s1.style.display = "none"
+              s2.style.display = "none"
+              b1.style.display = "none"
+              b2.style.display = "none"
+            } else if (value === "全部数据") {
+              t1.style.display = "none"
+              t2.style.display = "none"
+              t3.style.display = "block"
+              s1.style.display = "block"
+              s2.style.display = "block"
+              b1.style.display = "block"
+              b2.style.display = "block"
+            }
+          }}
+          style={{
+            marginBottom: "10px",
+          }}
+        />
+        <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "flex-end", marginBottom: "10px" }} >
+          <div style={{ display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: "flex-start", width: "100%" }}>
+            <Form style={{ width: "98%", display: "flex", flexDirection: "row" }}>
+              <div style={{ display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: "flex-start", width: "200%" }}>
+                <div id='s1' style={{ display: "none", width: "100%" }}>
+                  <Form.Item
+                    label="dalianTeam"
+                    name="dalianTeam"
+                    style={{ width: '90%' }}
+                  >
+                    <Space style={{ width: '100%' }} direction="vertical">
+                      <Select
+                        ref={selectRef1}
+                        mode="multiple"
+                        allowClear
+                        style={{ width: '100%' }}
+                        placeholder={"请选择"}
+                        value={selectedValues1}
+                        onChange={handleChange1}
+                        options={getDalianTeamSelect}
+                      />
+                    </Space>
+                  </Form.Item>
+                </div>
+                <div id='s2' style={{ display: "none", width: "100%" }}>
+                  <Form.Item
+                    label="project"
+                    name="project"
+                    style={{ width: '90%', marginLeft: "30px" }}
+                  >
+                    <Space style={{ width: '100%' }} direction="vertical">
+                      <Select
+                        ref={selectRef2}
+                        mode="multiple"
+                        allowClear
+                        style={{ width: '100%' }}
+                        placeholder={"请选择"}
+                        value={selectedValues2}
+                        onChange={handleChange2}
+                        options={getProjectSelect}
+                      />
+                    </Space>
+                  </Form.Item>
+                </div>
               </div>
-              <div id='b2' style={{ display: "none" }} >
+
+              <div style={{ display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+                <div id='b1' style={{ display: "none" }}>
+                  <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
+                    <Button type="primary" htmlType="submit" onClick={getAll}  >
+                      查询
+                    </Button>
+                  </Form.Item>
+                </div>
+                <div id='b2' style={{ display: "none" }} >
+                  <Form.Item wrapperCol={{ offset: 6, span: 16 }} style={{ marginLeft: "20px" }}>
+                    <Button type="primary" htmlType="submit" onClick={resetTableData}  >
+                      重置
+                    </Button>
+                  </Form.Item>
+                </div>
                 <Form.Item wrapperCol={{ offset: 6, span: 16 }} style={{ marginLeft: "20px" }}>
-                  <Button type="primary" htmlType="submit" onClick={resetTableData}  >
-                    重置
+                  <Button type="primary" htmlType="submit" onClick={exportExcel}>
+                    导出
                   </Button>
                 </Form.Item>
               </div>
-              <Form.Item wrapperCol={{ offset: 6, span: 16 }} style={{ marginLeft: "20px" }}>
-                <Button type="primary" htmlType="submit" onClick={exportExcel}>
-                  导出
-                </Button>
-              </Form.Item>
-            </div>
-          </Form>
+            </Form>
 
+          </div>
         </div>
-      </div>
-      <div id='t1' style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
-        <Spin spinning={loading} size={"large"} style={{ flex: 1, backgroundColor: "white", overflow: "hidden" }}>
-          {/* 表格容器 */}
-          <div
-            style={{
-              flex: 1,
-              overflow: "auto",
-              height: "calc(100vh - 200px)", // 动态计算表格高度
+        <div id='t1' style={{ display: "block", flexDirection: "column", alignItems: "flex-end" }}>
+          <Spin spinning={loading} size={"large"} style={{ flex: 1, backgroundColor: "white", overflow: "hidden" }}>
+            {/* 表格容器 */}
+            <div
+              style={{
+                flex: 1,
+                overflowX: "auto",
+              }}
+              className="table-container" // 添加自定义类名
+            >
+              <Table
+                columns={columns}
+                dataSource={paginatedData}
+                pagination={false} // 禁用默认分页
+                scroll={{ x: 'max-content', y: "calc(100vh - 350px)" }} // 设置表格滚动高度
+                rowClassName={() => "custom-row"} // 添加自定义行样式
+              />
+
+            </div>
+          </Spin>
+          {/* 自定义分页组件 */}
+          <Pagination
+            style={{ marginTop: "10px", textAlign: "center" }}
+            current={currentPage}
+            pageSize={pageSize}
+            total={dataSource.length}
+            showSizeChanger
+            pageSizeOptions={["5", "10", "20", "50"]}
+            onChange={(page, size) => {
+              setCurrentPage(page);
+              setPageSize(size);
             }}
-            className="table-container" // 添加自定义类名
-          >
-            <Table
-              columns={columns}
-              dataSource={paginatedData}
-              pagination={false} // 禁用默认分页
-              scroll={{ x: "max-content", y: "calc(100vh - 250px)" }} // 设置表格滚动高度
-              rowClassName={() => "custom-row"} // 添加自定义行样式
-            />
+            showTotal={(total) => `共 ${total} 条`}
+          />
+        </div>
+        <div id='t2' style={{ display: "none", flexDirection: "column", alignItems: "flex-end" }}>
+          <Spin spinning={loading} size={"large"} style={{ flex: 1, overflow: "hidden", backgroundColor: "white", }}>
+            {/* 表格容器 */}
+            <div
+              style={{
+                flex: 1,
+                overflowX: "auto",
+              }}
+              className="table-container" // 添加自定义类名
+            >
+              <Table
+                columns={columns}
+                dataSource={paginatedData2}
+                pagination={false} // 禁用默认分页
+                scroll={{ x: "max-content", y: "calc(100vh - 350px)" }} // 设置表格滚动高度
+                rowClassName={() => "custom-row"} // 添加自定义行样式
+              />
 
-          </div>
-        </Spin>
-        {/* 自定义分页组件 */}
-        <Pagination
-          style={{ marginTop: "10px", textAlign: "center" }}
-          current={currentPage}
-          pageSize={pageSize}
-          total={dataSource.length}
-          showSizeChanger
-          pageSizeOptions={["5", "10", "20", "50"]}
-          onChange={(page, size) => {
-            setCurrentPage(page);
-            setPageSize(size);
-          }}
-          showTotal={(total) => `共 ${total} 条`}
-        />
-      </div>
-      <div id='t2' style={{ display: "none", flexDirection: "column", alignItems: "flex-end" }}>
-        <Spin spinning={loading} size={"large"} style={{ flex: 1, overflow: "hidden", backgroundColor: "white", }}>
-          {/* 表格容器 */}
-          <div
-            style={{
-              flex: 1,
-              overflowX: "auto",
-              height: "calc(100vh - 200px)", // 动态计算表格高度
+            </div>
+          </Spin>
+          {/* 自定义分页组件 */}
+          <Pagination
+            style={{ marginTop: "10px", textAlign: "center" }}
+            current={currentPage2} // 当前页码
+            pageSize={pageSize2} // 每页条数
+            total={dataSource2.length} // 数据总数
+            showSizeChanger
+            pageSizeOptions={["5", "10", "20", "50"]}
+            onChange={(page, size) => {
+              setCurrentPage2(page); // 更新当前页码
+              setPageSize2(size); // 更新每页条数
             }}
-            className="table-container" // 添加自定义类名
-          >
-            <Table
-              columns={columns}
-              dataSource={paginatedData2}
-              pagination={false} // 禁用默认分页
-              scroll={{ x: "max-content", y: "calc(100vh - 250px)" }} // 设置表格滚动高度
-              rowClassName={() => "custom-row"} // 添加自定义行样式
-            />
-
-          </div>
-        </Spin>
-        {/* 自定义分页组件 */}
-        <Pagination
-          style={{ marginTop: "10px", textAlign: "center" }}
-          current={currentPage2}
-          pageSize={pageSize2}
-          total={dataSource2.length}
-          showSizeChanger
-          pageSizeOptions={["5", "10", "20", "50"]}
-          onChange={(page, size) => {
-            setCurrentPage(page);
-            setPageSize(size);
-          }}
-          showTotal={(total) => `共 ${total} 条`}
-        />
-      </div>
-      <div id='t3' style={{ display: "none", flexDirection: "column", alignItems: "flex-end" }}>
-        <Spin spinning={loading} size={"large"} style={{ flex: 1, overflow: "hidden", backgroundColor: "white", }}>
-          {/* 表格容器 */}
-          <div
-            style={{
-              flex: 1,
-              overflow: "hidden",
-              height: "calc(100vh - 200px)", // 动态计算表格高度
+            showTotal={(total) => `共 ${total} 条`} // 显示总条数
+          />
+        </div>
+        <div id='t3' style={{ display: "none", flexDirection: "column", alignItems: "flex-end" }}>
+          <Spin spinning={loading} size={"large"} style={{ flex: 1, overflow: "hidden", backgroundColor: "white", }}>
+            {/* 表格容器 */}
+            <div
+              style={{
+                width: "100%",
+                overflowX: "auto", // 确保表格内容可以水平滚动
+              }}
+            >
+              <Table
+                columns={columns}
+                dataSource={paginatedData3}
+                pagination={false}
+                scroll={{ x: "max-content", y: "calc(100vh - 250px)" }}
+              />
+            </div>
+          </Spin>
+          {/* 自定义分页组件 */}
+          <Pagination
+            style={{ marginTop: "10px", textAlign: "center" }}
+            current={currentPage3} // 当前页码
+            pageSize={pageSize3} // 每页条数
+            total={dataSource3.length} // 数据总数
+            showSizeChanger
+            pageSizeOptions={["5", "10", "20", "50"]}
+            onChange={(page, size) => {
+              setCurrentPage3(page); // 更新当前页码
+              setPageSize3(size); // 更新每页条数
             }}
-            className="table-container" // 添加自定义类名
-          >
-            <Table
-              columns={columns}
-              dataSource={paginatedData3}
-              pagination={false} // 禁用默认分页
-              scroll={{ x: "max-content", y: "calc(100vh - 250px)" }} // 设置表格滚动高度
-              rowClassName={() => "custom-row"} // 添加自定义行样式
-            />
+            showTotal={(total) => `共 ${total} 条`} // 显示总条数
+          />
+        </div>
 
-          </div>
-        </Spin>
-        {/* 自定义分页组件 */}
-        <Pagination
-          style={{ marginTop: "10px", textAlign: "center" }}
-          current={currentPage3}
-          pageSize={pageSize3}
-          total={dataSource3.length}
-          showSizeChanger
-          pageSizeOptions={["5", "10", "20", "50"]}
-          onChange={(page, size) => {
-            setCurrentPage(page);
-            setPageSize(size);
-          }}
-          showTotal={(total) => `共 ${total} 条`}
-        />
       </div>
-
-    </div>
     </>
   );
 }
+// 假数据生成函数
+const generateMockData = (count: number) => {
+  return Array.from({ length: count }, (_, index) => ({
+    id: `${index + 1}`,
+    dalianTeam: `Team ${index % 5 + 1}`, // 模拟 5 个大连团队
+    tokyoTeam: `Tokyo Team ${index % 3 + 1}`, // 模拟 3 个东京团队
+    name: `Name ${index + 1}`,
+    project: `Project ${index % 4 + 1}`, // 模拟 4 个项目
+    workingTime: `${8 + (index % 3)} hours`, // 模拟工作时间
+    task: `啊实打实的阿斯顿阿三大苏打撒旦阿斯顿阿三阿三啊大苏打实打实的啊实打实大苏打啊实打实大苏打 ${index + 1}`,
+    memo: `Memo for task ${index + 1}`,
+    entity: `Entity ${index % 2 === 0 ? "A" : "B"}`, // 模拟实体 A 和 B
+  }));
+};
+
+// 假数据接口模拟
+const mockDalianTeamData = [
+  { dalianTeam: "Team 1" },
+  { dalianTeam: "Team 2" },
+  { dalianTeam: "Team 3" },
+  { dalianTeam: "Team 4" },
+  { dalianTeam: "Team 5" },
+];
+
+const mockProjectData = [
+  { project: "Project 1" },
+  { project: "Project 2" },
+  { project: "Project 3" },
+  { project: "Project 4" },
+];
+
+// 模拟接口返回的表格数据
+const mockPassData = generateMockData(50); // 模拟 50 条合格数据
+const mockUnPassData = generateMockData(30); // 模拟 30 条不合格数据
+const mockAllData = generateMockData(80); // 模拟 80 条全部数据

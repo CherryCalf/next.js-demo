@@ -22,58 +22,58 @@ const exportExcel = () => {
 }
 
 export default function filter() {
-   const [columns, setColumns] = useState()
-    const [dataSource, setDataSource] = useState()
-  
-    const getListName = function () {
-      axiosGet('/user/total/listTableName').then((res) => {
-        let s1: React.SetStateAction<undefined> | { title: any; dataIndex: any; key: any; fixed?: any; width?: any; ellipsis?: any; render?: any }[] = []
-  
-        for (let index = 0; index < res.data.data.length; index++) {
-          s1.push({ title: res.data.data[index], dataIndex: res.data.data[index], key: res.data.data[index] })
-        }
-        s1[0].fixed = "left"
-        s1[1].fixed = "left"
-        s1[2].fixed = "left"
-  
-        s1[0].width = 50
-        s1[2].width = 300
-        s1[3].width = 100
-        s1[4].width = 160
-        s1[5].width = 100
+  const [columns, setColumns] = useState()
+  const [dataSource, setDataSource] = useState()
 
-        for (let index = 6; index < res.data.data.length; index++) {
-          s1[index].width = 140
+  const getListName = function () {
+    axiosGet('/user/total/listTableName').then((res) => {
+      let s1: React.SetStateAction<undefined> | { title: any; dataIndex: any; key: any; fixed?: any; width?: any; ellipsis?: any; render?: any }[] = []
+
+      for (let index = 0; index < res.data.data.length; index++) {
+        s1.push({ title: res.data.data[index], dataIndex: res.data.data[index], key: res.data.data[index] })
+      }
+      s1[0].fixed = "left"
+      s1[1].fixed = "left"
+      s1[2].fixed = "left"
+
+      s1[0].width = 50
+      s1[2].width = 300
+      s1[3].width = 100
+      s1[4].width = 160
+      s1[5].width = 100
+
+      for (let index = 6; index < res.data.data.length; index++) {
+        s1[index].width = 140
+      }
+      setColumns(s1)
+      axiosGet('/user/total/listAll').then((res) => {
+        for (let index = 0; index < res.data.data.length; index++) {
+          res.data.data[index].id = index + 1
         }
-        setColumns(s1)
-        axiosGet('/user/total/listAll').then((res) => {
-          for(let index = 0; index < res.data.data.length; index++){
-            res.data.data[index].id = index+1
-          }
-          setDataSource(res.data.data)
-        })
-  
-        axiosGet('/user/total/totalStatistics').then((res) => {
-  
-          const length = s1.length
-          let s2 = []
-          var totalKeys = Object.keys(res.data.data)
-          var totalValues = Object.values(res.data.data)
-          for (let index = 3; index < s1.length; index++) {
-            for (let i = 0; i < totalKeys.length; i++) {
-              const totalKey = totalKeys[i];
-              const totalValue = totalValues[i];
-              if (totalKey == s1[index].key) {
-                s2.push(totalValue);
-              }
+        setDataSource(res.data.data)
+      })
+
+      axiosGet('/user/total/totalStatistics').then((res) => {
+
+        const length = s1.length
+        let s2 = []
+        var totalKeys = Object.keys(res.data.data)
+        var totalValues = Object.values(res.data.data)
+        for (let index = 3; index < s1.length; index++) {
+          for (let i = 0; i < totalKeys.length; i++) {
+            const totalKey = totalKeys[i];
+            const totalValue = totalValues[i];
+            if (totalKey == s1[index].key) {
+              s2.push(totalValue);
             }
           }
-          setItems(s2)
-        })
+        }
+        setItems(s2)
       })
-    }
-  
-    let [items, setItems] = useState([])
+    })
+  }
+
+  let [items, setItems] = useState([])
 
   //调用方法
   useEffect(() => {
@@ -84,7 +84,7 @@ export default function filter() {
 
   return (
     <>
-      <div style={{ marginBottom: "10px" ,height:"40px", fontStyle: "STKaiti"}}>
+      <div style={{ marginBottom: "10px", height: "40px", fontStyle: "STKaiti" }}>
         <Breadcrumb
           items={[
             {
@@ -92,21 +92,24 @@ export default function filter() {
             }
           ]}
         />
-        <h1 style={{fontSize:"20px"}}>
+        <h1 style={{ fontSize: "20px" }}>
           (140人/月)
         </h1>
       </div>
 
-      <Form.Item wrapperCol={{ offset: 6, span: 16 }} style={{ marginLeft: "95%", marginTop: "30px"  }}>
-        <Button type="primary" htmlType="submit" onClick={exportExcel}>
-          导出
-        </Button>
-      </Form.Item>
+      {/* 导出按钮 */}
+      <div style={{ display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+        <Form.Item wrapperCol={{ offset: 6, span: 16 }} style={{ marginRight: "20px" }}>
+          <Button type="primary" htmlType="submit" onClick={exportExcel}>
+            导出
+          </Button>
+        </Form.Item>
+      </div>
 
       <Table<DataType>
         columns={columns}
         dataSource={dataSource}
-        scroll={{ x: 'max-content', y: 55 * 10 }}
+        scroll={{ x: 'max-content', y: "calc(100vh - 350px)" }}
         pagination={{ position: [bottom], defaultPageSize: 99999 }}
         summary={() => (
           <Table.Summary fixed>
