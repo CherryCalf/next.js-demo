@@ -374,3 +374,48 @@ const TableWithDynamicHeader = () => {
 };
 
 export default TableWithDynamicHeader;
+
+
+
+
+
+
+
+
+const selectRef1 = useRef(null);
+  const selectRef2 = useRef(null);
+  const [selectedValues1, setSelectedValues1] = useState<string[]>([]);
+  const [selectedValues2, setSelectedValues2] = useState<string[]>([]);
+  let param = {
+    dalianTeam: [],
+    project: []
+  }
+  const handleChange1 = (value: string[]) => {
+    console.log(`selected ${value}`);
+    param.dalianTeam = value
+    console.log(param)
+    setSelectedValues1(value);
+  };
+  const handleChange2 = (value: string[]) => {
+    console.log(`selected ${value}`);
+    param.project = value
+    console.log(param)
+    setSelectedValues2(value);
+  };
+
+  const getAll = () => {
+    console.log(param)
+    axiosPost("/user/filterData", param).then(res => {
+      setDataSource3(res.data.data)
+    });
+  }
+  //重置表格数据
+  const resetTableData = () => {
+    param = {
+      dalianTeam: [],
+      project: []
+    }
+    setSelectedValues1([])
+    setSelectedValues2([])
+    getAll()
+  }
