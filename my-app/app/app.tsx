@@ -1,24 +1,13 @@
-import { AppProps } from 'next/app';
-import { useRouter } from 'next/router';
-import Layout from '../components/GLayout';
+'use client'
+import React, { useState, useEffect } from 'react';
+import { axiosPost } from '@/public/AxiosUtil'
+import { useRouter } from 'next/router'
+const App: React.FC = () => {
 
-function MyApp({ Component, pageProps }: AppProps) {
-  const router = useRouter();
+    
+    return (
+        <div></div>
+    );
+};
 
-  // 判断当前路径是否为登录页
-  const isLoginPage = router.pathname === '/login';
-
-  return (
-    <>
-      {isLoginPage ? (
-        <Component {...pageProps} />
-      ) : (
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      )}
-    </>
-  );
-}
-
-export default MyApp;
+export default App;
