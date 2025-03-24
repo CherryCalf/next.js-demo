@@ -78,3 +78,11 @@ docker build -t my-java-app .
 ### 总结
 
 通过配置 Docker 使用公司代理或使用本地基础镜像，您可以解决由于网络限制导致的 Docker 镜像构建问题。根据您的具体情况选择合适的方法。
+
+
+
+
+
+
+
+ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
