@@ -237,3 +237,58 @@ export default function FilesUpload() {
 ```
 
 请尝试使用上述修正后的代码，并确保所有必要的依赖已正确导入。如果仍然存在编译错误，请提供具体的错误信息以便进一步调试。
+
+
+
+在 Next.js 中，您可以通过多种方式实现页面重定向并触发强刷新。以下是两种常见方法：
+
+### 1. 使用 `useEffect` 和 `window.location.href`
+
+如果您希望在客户端进行重定向并触发页面的强刷新，可以使用 `useEffect` 钩子和 `window.location.href`：
+
+```jsx
+import { useEffect } from 'react';
+
+const RedirectPage = () => {
+  useEffect(() => {
+    // 重定向到目标页面并触发强刷新
+    window.location.href = '/target-page';
+  }, []);
+
+  return null;
+};
+
+export default RedirectPage;
+```
+
+### 2. 在 `getServerSideProps` 中使用 `res.writeHead` 和 `res.end`
+
+如果您希望在服务器端进行重定向，可以在 `getServerSideProps` 中使用 `res.writeHead` 和 `res.end`：
+
+```jsx
+export async function getServerSideProps(context) {
+  const { res } = context;
+
+  res.writeHead(302, {
+    Location: '/target-page',
+  });
+  res.end();
+
+  return {
+    props: {},
+  };
+}
+
+const RedirectPage = () => {
+  return null;
+};
+
+export default RedirectPage;
+```
+
+### 总结
+
+- **客户端重定向**：使用 `useEffect` 和 `window.location.href` 进行客户端重定向并触发强刷新。
+- **服务器端重定向**：在 `getServerSideProps` 中使用 `res.writeHead` 和 `res.end` 进行服务器端重定向。
+
+选择其中一种方法，根据您的具体需求来实现页面重定向和强刷新。如果您有其他问题或需要进一步的帮助，请告诉我！
