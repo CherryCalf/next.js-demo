@@ -693,3 +693,51 @@ export default function Login({ children }: { children: React.ReactNode }) {
 - **将 `localStorage` 操作放在 `useEffect` 钩子中，确保在客户端执行。**
 
 这样可以避免在服务端渲染过程中访问 `localStorage`，从而解决打包时 `localStorage` 未定义的问题。
+
+
+
+import axios from "axios";
+import { useLocalStorage } from 'beautiful-react-hooks';
+
+// 创建一个获取 token 的函数
+const getToken = () => {
+  const [token] = useLocalStorage('token', '');
+  return token;
+};
+
+export async function axiosGet(url: any, params: any = null, ContentType: string = 'application/json', responseType = '') {
+  const token = getToken();
+  return axios("http://localhost:8080" + url, {
+    method: 'get',
+    headers: {
+      'Content-Type': ContentType,
+      'token': token
+    },
+    responseType: responseType,
+    params: params
+  });
+}
+
+export async function axiosPost(url: any, data: any = null, ContentType: string = 'application/json') {
+  const token = getToken();
+  return axios("http://localhost:8080" + url, {
+    method: 'post',
+    headers: {
+      'Content-Type': ContentType,
+      'token': token
+    },
+    data: data
+  });
+}
+
+export async function axiosPut(url: any, data: any = null, ContentType: string = 'application/json') {
+  const token = getToken();
+  return axios("http://localhost:8080" + url, {
+    method: 'put',
+    headers: {
+      'Content-Type': ContentType,
+      'token': token
+    },
+    data: data
+  });
+}
