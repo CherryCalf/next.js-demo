@@ -864,3 +864,6 @@ export default MyComponent;
 - 如果项目使用了特定的 Gradle 插件或配置，确保这些插件和配置在 `build.gradle` 文件中正确配置。
 
 通过以上步骤，你可以在 Eclipse 中成功导入并使用 Gradle 项目。如果遇到任何问题，请随时告诉我！
+
+
+https://cloud.tencent.com/developer/ask/sof/812600/answer/1175090
