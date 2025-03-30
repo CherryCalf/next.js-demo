@@ -1,0 +1,216 @@
+在前后端不分离的项目中，前端使用 Vue.js 并打包成静态文件放入 Spring Boot 项目的 `resources` 目录下，通过 Spring Boot 内嵌的 Tomcat 服务器一起运行。前后端通过 HTTP 请求（通常是 REST API）进行通信。在这种设置中，使用 `$commit` 进行通信可能是指在 Vuex 中提交一个变更，并通过 axios 或 fetch 发送 HTTP 请求到后端。
+
+下面是一个详细的步骤指南：
+
+### 1. 创建并打包 Vue.js 应用
+
+首先，确保你已经创建了一个 Vue.js 项目。如果还没有，可以使用 Vue CLI 创建一个新的项目：
+
+```bash
+vue create my-vue-app
+```
+
+然后，进入项目目录并打包应用：
+
+```bash
+cd my-vue-app
+npm run build
+```
+
+这将生成一个 `dist` 目录，其中包含打包后的静态文件（HTML、CSS、JavaScript 等）。
+
+### 2. 配置 Spring Boot 项目
+
+#### 创建 Spring Boot 项目
+
+使用 Spring Initializr 创建一个新的 Spring Boot 项目，选择以下依赖项：
+- Spring Web
+
+#### 复制 Vue.js 打包文件
+
+将 `dist` 目录中的所有文件复制到 Spring Boot 项目的 `src/main/resources/static` 目录下。如果 `static` 目录不存在，请创建它。
+
+```plaintext
+src/main/resources/static/
+   ├── css/
+   ├── js/
+   ├── index.html
+   └── ...
+```
+
+#### 配置 Spring Boot 控制器
+
+创建一个简单的控制器类，以确保所有请求都被重定向到 `index.html`：
+
+```java
+// src/main/java/com/example/demo/controller/IndexController.java
+package com.example.demo.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class IndexController {
+
+    @GetMapping("/{path:[^\\.]*}")
+    public String forward() {
+        // Forward to home page so that route is preserved.
+        return "forward:/";
+    }
+}
+```
+
+这个控制器确保所有非静态文件的请求都被重定向到 `index.html`，从而让 Vue.js 处理前端路由。
+
+### 3. 创建 REST API 控制器
+
+创建一个 REST API 控制器类以处理前端发送的请求：
+
+```java
+// src/main/java/com/example/demo/controller/ApiController.java
+package com.example.demo.controller;
+
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api")
+public class ApiController {
+
+    @GetMapping("/message")
+    public String getMessage() {
+        return "Hello from Spring Boot!";
+    }
+
+    @PostMapping("/data")
+    public String postData(@RequestBody String data) {
+        return "Received data: " + data;
+    }
+}
+```
+
+### 4. 修改 Vue.js 应用进行通信
+
+在 Vue.js 应用中使用 Vuex 和 Axios 进行通信。首先，安装 Vuex 和 Axios：
+
+```bash
+npm install vuex axios
+```
+
+#### 配置 Vuex
+
+在 `src` 目录下创建 `store.js` 文件：
+
+```javascript
+// src/store.js
+import Vue from 'vue';
+import Vuex from 'vuex';
+import axios from 'axios';
+
+Vue.use(Vuex);
+
+export default new Vuex.Store({
+  state: {
+    message: '',
+    response: ''
+  },
+  mutations: {
+    SET_MESSAGE(state, message) {
+      state.message = message;
+    },
+    SET_RESPONSE(state, response) {
+      state.response = response;
+    }
+  },
+  actions: {
+    fetchMessage({ commit }) {
+      axios.get('/api/message')
+        .then(response => {
+          commit('SET_MESSAGE', response.data);
+        })
+        .catch(error => {
+          console.error("There was an error!", error);
+        });
+    },
+    sendData({ commit }, data) {
+      axios.post('/api/data', data)
+        .then(response => {
+          commit('SET_RESPONSE', response.data);
+        })
+        .catch(error => {
+          console.error("There was an error!", error);
+        });
+    }
+  }
+});
+```
+
+#### 修改 Vue.js 应用
+
+在 `src/main.js` 中引入 Vuex：
+
+```javascript
+// src/main.js
+import Vue from 'vue';
+import App from './App.vue';
+import store from './store';
+
+Vue.config.productionTip = false;
+
+new Vue({
+  store,
+  render: h => h(App),
+}).$mount('#app');
+```
+
+在 `src/App.vue` 中使用 Vuex 进行状态管理和通信：
+
+```vue
+<template>
+  <div id="app">
+    <h1>{{ message }}</h1>
+    <button @click="fetchMessage">Fetch Message</button>
+    <p>{{ response }}</p>
+    <input v-model="inputData" placeholder="Enter some data">
+    <button @click="sendData">Send Data</button>
+  </div>
+</template>
+
+<script>
+import { mapState, mapActions } from 'vuex';
+
+export default {
+  data() {
+    return {
+      inputData: ''
+    };
+  },
+  computed: {
+    ...mapState(['message', 'response'])
+  },
+  methods: {
+    ...mapActions(['fetchMessage', 'sendData']),
+    sendData() {
+      this.$store.dispatch('sendData', this.inputData);
+    }
+  }
+};
+</script>
+```
+
+### 5. 运行项目
+
+#### 启动 Spring Boot 应用
+
+在 Spring Boot 项目根目录运行以下命令：
+
+```bash
+./mvnw spring-boot:run
+```
+
+#### 访问应用
+
+打开浏览器并访问 `http://localhost:8080`，你应该能够看到 Vue.js 应用的主页，并通过按钮与后端 API 进行通信。
+
+### 总结
+
+通过以上步骤，你可以将前端 Vue.js 应用打包后的静态文件放入 Spring Boot 项目的 `resources/static` 目录中，并通过 Spring Boot 内嵌的 Tomcat 服务器一起运行。这种方式可以在一个项目中同时运行前端和后端，简化了部署和管理。前后端通过 HTTP 请求（通常是 REST API）进行通信，实现数据的获取和操作。
