@@ -4,3 +4,18 @@ useState
 组件库
 路由
 生命周期钩子
+#最高取引数量
+
+if ((not defined($in->(upperTradeQuantity))) || ($in->{upperTradeQuantity) eq "))
+
+{
+
+$in->(upper TradeQuantity) = $TRADEUNIT;
+}
+#最高がNULLであれば取引単位を設定
+
+else{
+
+$in->(upper TradeQuantity) = sprintf("%.0f", ($TRADEUNIT 250000));
+}
+#最高取引数量(取引単位*250000)
