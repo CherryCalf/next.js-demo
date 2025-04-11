@@ -1,1 +1,3 @@
 https://blog.csdn.net/godelgnis/article/details/89683760
+
+localhost/:1  Refused to execute script from 'http://localhost:8080/in-house-mail/js/chunk-vendors.js' because its MIME type ('') is not executable, and strict MIME type checking is enabled.
