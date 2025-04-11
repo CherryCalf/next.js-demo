@@ -1,3 +1,89 @@
 https://blog.csdn.net/godelgnis/article/details/89683760
 
 localhost/:1  Refused to execute script from 'http://localhost:8080/in-house-mail/js/chunk-vendors.js' because its MIME type ('') is not executable, and strict MIME type checking is enabled.
+
+package com.Management.InHouseMail.config;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    CustomAuthenticationProvider authenticationProvider;
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new CustomAccessDeniedHandler();
+    }
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return new CustomAuthenticationEntryPoint();
+    }
+
+    @Override
+    protected void configure(HttpSecurity web) throws Exception {
+
+        CustomAuthenticationFilter filter = new CustomAuthenticationFilter();
+        filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login", "POST"));
+        filter.setAuthenticationManager(authenticationManagerBean());
+        filter.setAuthenticationFailureHandler(new CustomAuthenticationFailureHandler());
+        filter.setAuthenticationSuccessHandler(new CustomAuthenticationSuucessHandler());
+
+        web.formLogin().loginPage("/").permitAll()
+
+                //  ヘッダーフレームオプションカスタマイズ
+                .and()
+                .headers().frameOptions().sameOrigin()
+
+                // アクセス権限の設定
+                .and()
+                .authorizeRequests().antMatchers("/", "/*.ico", "/*.html", "/*.jpg","/*.js","/css/**", "/images/**", "/js/**", "/fonts/**", "/actuator/health","/static/**").permitAll()
+                .anyRequest().authenticated()
+
+                // アクセス認証判定
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint())
+                .accessDeniedHandler(accessDeniedHandler())
+
+                // ログアウト
+                .and().logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .deleteCookies("JSESSIONID", "XSRF-TOKEN")
+                .invalidateHttpSession(true)
+
+                // トークン設定
+                .and().csrf().ignoringAntMatchers("/login", "/logout").csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .and().addFilterAfter(filter, CsrfFilter.class)//.addFilter(filter)
+                .sessionManagement().invalidSessionUrl("/").maximumSessions(1)
+
+        ;
+    }
+
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        //主に全体に対するセキュリティ設定を行う
+        web.ignoring().antMatchers("/css/**", "/js/**", "/images/**","/static/**");
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider);
+        auth.eraseCredentials(true);
+    }
+}
